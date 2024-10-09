@@ -3,17 +3,9 @@
   <script type="text/javascript" src="//libs.glia.com/axon.js"></script>
   <script>
 
-window.myGlobalObject = {
-    testFunction: function() {
-        console.log("Test function called");
-    },
-    testVariable: "This is a test"
-};
-
-
-
     let globalJsonResponse;
     let allNumbers;
+
     const getData = async (url, headers) => {
       const response = await fetch(url, {headers: headers});
       const jsonData = await response.json();
@@ -22,7 +14,7 @@ window.myGlobalObject = {
         number.compliance && 
         number.compliance.status === "verified"
       );
-      console.log("v5")
+      console.log("v6")
       globalJsonResponse = filteredNumbers;
       populateDropdown(filteredNumbers);
       return filteredNumbers;
@@ -152,6 +144,7 @@ window.myGlobalObject = {
 
     // Define session handler
     const embeddedSignupInfoListener = (event) => {
+    console.log("embeddedSignupInfoListener event recieved");
       if (!event.origin.endsWith("facebook.com")) return;
       try {
         const data = JSON.parse(event.data);
