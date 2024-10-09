@@ -3,15 +3,17 @@
   <script type="text/javascript" src="//libs.glia.com/axon.js"></script>
   <script>
 
-    let filteredNumbers;
+    let globalJsonResponse;
+    let allNumbers;
     const getData = async (url, headers) => {
       const response = await fetch(url, {headers: headers});
       const jsonData = await response.json();
-      filteredNumbers = jsonData.incoming_phone_numbers.filter(number => 
+      allNumbers = jsonData;
+      const filteredNumbers = jsonData.incoming_phone_numbers.filter(number => 
         number.compliance && 
         number.compliance.status === "verified"
       );
-     
+      globalJsonResponse = filteredNumbers;
       populateDropdown(filteredNumbers);
       return filteredNumbers;
     };
