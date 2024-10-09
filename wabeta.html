@@ -16,7 +16,7 @@
         number.compliance && 
         number.compliance.status === "verified"
       );
-      console.log("v8")
+      console.log("v9")
       globalJsonResponse = filteredNumbers;
       populateDropdown(filteredNumbers);
       return filteredNumbers;
@@ -28,6 +28,11 @@
       .then(data => console.info(data))
       .catch(error => console.error(error));
     });
+    // const headers= {};
+    // getData(`https://e594fe19-c1c5-4c51-8bfc-ff432fbb6682.mock.pstmn.io/omnicall/incoming_phone_numbers`, headers)
+    //   .then(data => console.info(data))
+    //   .catch(error => console.error(error));
+    
 
     function populateDropdown(data) {
     // Create the select element
@@ -64,7 +69,7 @@
 
         }
     });
-    
+  }
 
     function simulateEmbeddedSignup(event, data) {
       window.postMessage(JSON.stringify({
