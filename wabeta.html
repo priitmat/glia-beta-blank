@@ -7,7 +7,7 @@
     const getData = async (url, headers) => {
       const response = await fetch(url, {headers: headers});
       const jsonData = await response.json();
-      const filteredNumbers = jsonData.filter(number => 
+      const filteredNumbers = jsonData.incoming_phone_numbers.filter(number => 
     number.compliance && 
     number.compliance.status === "verified"
 );
