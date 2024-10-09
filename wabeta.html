@@ -13,7 +13,7 @@
         number.compliance && 
         number.compliance.status === "verified"
       );
-      console.log("v1")
+      console.log("v2")
       globalJsonResponse = filteredNumbers;
       populateDropdown(filteredNumbers);
       return filteredNumbers;
@@ -111,6 +111,15 @@ function populateDropdown(data) {
             if (data.event === "FINISH"|| data.event === "FINISH_ONLY_WABA") {
               const { phone_number_id, waba_id } = data.data;
               console.log({ phone_number_id, waba_id });
+              // Create and populate the list
+              const resultContainer = document.getElementById('resultContainer');
+                resultContainer.innerHTML = `
+                    <h2>Registration Result:</h2>
+                    <ul>
+                        <li><strong>Selected Phone Number:</strong> ${selectedPhoneNumber}</li>
+                        <li><strong>WABA ID:</strong> ${waba_id}</li>
+                    </ul>
+                `;
             } else {
               const { current_step } = data.data;
               console.log(`User did not finish ESU. Last step: ${current_step}`);
@@ -190,6 +199,8 @@ function populateDropdown(data) {
       <button id="fbLoginButton">
         Login with Facebook
       </button>
+      <div id="resultContainer"></div>
+
     </div>
 
     
@@ -232,6 +243,33 @@ function populateDropdown(data) {
 
 #phoneDropdown option {
     padding: 10px;
+}
+
+#resultContainer {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+#resultContainer h2 {
+    margin-top: 0;
+    color: #0056b3;
+    font-size: 20px;
+}
+
+#resultContainer ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+#resultContainer li {
+    margin-bottom: 10px;
+}
+
+#resultContainer strong {
+    color: #333;
 }
 
 </style>
