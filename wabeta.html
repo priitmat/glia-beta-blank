@@ -38,7 +38,7 @@ function populateDropdown(data) {
     select.appendChild(defaultOption);
 
     // Loop through the incoming_phone_numbers array
-    data.incoming_phone_numbers.forEach(item => {
+    data.forEach(item => {
         const option = document.createElement('option');
         option.value = item.phone_number;
         option.text = `${item.name} (${item.phone_number})`;
