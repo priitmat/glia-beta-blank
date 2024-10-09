@@ -5,6 +5,8 @@
 
     let globalJsonResponse;
     let allNumbers;
+    let selectedPhoneNumber = '';
+
 
     const getData = async (url, headers) => {
       const response = await fetch(url, {headers: headers});
@@ -14,7 +16,7 @@
         number.compliance && 
         number.compliance.status === "verified"
       );
-      console.log("v6")
+      console.log("v7")
       globalJsonResponse = filteredNumbers;
       populateDropdown(filteredNumbers);
       return filteredNumbers;
@@ -55,8 +57,11 @@
         const fbButton = document.getElementById('fbLoginButton');
         if (this.value) {
             fbButton.style.display = 'inline-block';
+            selectedPhoneNumber = this.value; // Update the selected phone number
         } else {
             fbButton.style.display = 'none';
+            selectedPhoneNumber = ''; // Clear the selected phone number
+
         }
     });
     }
