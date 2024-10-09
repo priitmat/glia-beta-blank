@@ -13,6 +13,7 @@
         number.compliance && 
         number.compliance.status === "verified"
       );
+      console.log(filteredNumbers)
       globalJsonResponse = filteredNumbers;
       populateDropdown(filteredNumbers);
       return filteredNumbers;
