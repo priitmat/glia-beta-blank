@@ -22,7 +22,7 @@ window.myGlobalObject = {
         number.compliance && 
         number.compliance.status === "verified"
       );
-      console.log("v4")
+      console.log("v5")
       globalJsonResponse = filteredNumbers;
       populateDropdown(filteredNumbers);
       return filteredNumbers;
@@ -35,7 +35,7 @@ window.myGlobalObject = {
       .catch(error => console.error(error));
     });
 
-  function populateDropdown(data) {
+    function populateDropdown(data) {
     // Create the select element
     const select = document.createElement('select');
     select.id = 'phoneDropdown';
@@ -67,6 +67,7 @@ window.myGlobalObject = {
             fbButton.style.display = 'none';
         }
     });
+    }
 
     function simulateEmbeddedSignup(event, data) {
       window.postMessage(JSON.stringify({
@@ -75,8 +76,6 @@ window.myGlobalObject = {
           data: data
         }), "https://okta.app.beta.glia.com");
       }
-    }
-
 
     // Array to store registered number and WABA ID pairs
     let registeredPairs = [];
