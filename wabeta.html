@@ -3,6 +3,15 @@
   <script type="text/javascript" src="//libs.glia.com/axon.js"></script>
   <script>
 
+window.myGlobalObject = {
+    testFunction: function() {
+        console.log("Test function called");
+    },
+    testVariable: "This is a test"
+};
+
+
+
     let globalJsonResponse;
     let allNumbers;
     const getData = async (url, headers) => {
