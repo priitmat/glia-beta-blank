@@ -7,9 +7,13 @@
     const getData = async (url, headers) => {
       const response = await fetch(url, {headers: headers});
       const jsonData = await response.json();
-      globalJsonResponse = jsonData;
-      populateDropdown(jsonData);
-      return jsonData;
+      const filteredNumbers = jsonData.filter(number => 
+    number.compliance && 
+    number.compliance.status === "verified"
+);
+      globalJsonResponse = filteredNumbers;
+      populateDropdown(filteredNumbers);
+      return filteredNumbers;
     };
 
     window.getGliaApi({version: 'v1'}).then(async api => {
