@@ -48,6 +48,16 @@ function populateDropdown(data) {
     // Add the select element to the DOM
     const container = document.getElementById('dropdownContainer');
     container.appendChild(select);
+
+    // Add event listener to the dropdown
+    select.addEventListener('change', function() {
+        const fbButton = document.getElementById('fbLoginButton');
+        if (this.value) {
+            fbButton.style.display = 'inline-block';
+        } else {
+            fbButton.style.display = 'none';
+        }
+    });
 }
 
 
@@ -170,6 +180,7 @@ function populateDropdown(data) {
         height: 40px;
         padding: 0 24px;
         margin-left: 20px;
+        display: none;        
       }
     </style>
     <div class="glia-hub">
