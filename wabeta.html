@@ -13,6 +13,7 @@
       let allNumbers;
       let selectedPhoneNumber = "";
       // Array to store registered number and WABA ID pairs
+      //k7LW%qGR2jQE%@o
       let registeredPairs = [];
 
       const getData = async (url, headers) => {
@@ -811,15 +812,13 @@
     <div class="glia-hub">
       <h1>Register for WhatsApp</h1>
       <p>
-        After clicking the "Login with Facebook" button, you'll be redirected to
-        Facebook's login page. Once you've successfully authenticated, you'll
-        grant Glia permission to access your WhatsApp Business account. This
-        process allows Glia to retrieve your WhatsApp Business API credentials
-        securely. Upon completion, you'll be returned to Glia Hub. For more
-        information, visit the
-        <a href="https://www.twilio.com/docs/whatsapp/self-sign-up"
-          >Twilio WhatsApp Self-Sign-Up documentation</a
-        >.
+        1. From the dropdown menu, select the phone number you wish to associate with your WhatsApp Business account.
+      </p>
+        2. Click the "Login with Facebook" button to initiate the authentication process.
+        <p>
+        3. Upon clicking the "Login with Facebook" button, you will be redirected to Facebook's secure login page. After successfully authenticating your credentials, you will be prompted to grant Glia permission to access your WhatsApp Business account. This step is crucial as it enables Glia to securely retrieve your WhatsApp Business API credentials.
+        
+        Once you have completed the authentication and authorization process, you will be automatically redirected back to the Glia Hub platform
       </p>
       <div id="dropdownContainer"></div>
       <button id="fbLoginButton">Login with Facebook</button>
