@@ -87,7 +87,7 @@
         option.value = item.phone_number;
         option.text = `${item.name} (${item.phone_number})`;
         select.appendChild(option);
-        addRegisteredPair(item.phone_number, item.whatsapp_id);
+        addRegisteredPair(item.phone_number, item.whatsapp_id, item.name);
       }
     });
 
@@ -120,10 +120,9 @@
       }
 
       // Function to add a new pair to the list
-      async function addRegisteredPair(phoneNumber, wabaId) {
+      async function addRegisteredPair(phoneNumber, wabaId, name) {
         try {
-          sendWhatsAppData(phoneNumber, wabaId);
-          registeredPairs.push({ phoneNumber, wabaId });
+          registeredPairs.push({ phoneNumber, wabaId, name });
           updateRegisteredList();
         } catch (error) {
           console.error('Failed to register WhatsApp data:', error);
@@ -137,7 +136,7 @@
         list.innerHTML = "";
         registeredPairs.forEach((pair) => {
           const li = document.createElement("li");
-          li.textContent = `Phone: ${pair.phoneNumber} - WABA ID: ${pair.wabaId}`;
+          li.textContent = `Name: ${pair.name} - Phone: ${pair.phoneNumber} - WABA ID: ${pair.wabaId}`;
           list.appendChild(li);
         });
       }
