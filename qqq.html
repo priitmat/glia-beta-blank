@@ -45,7 +45,7 @@
 
 
         console.log('Starting to send to api');
-
+        
         const response = await fetch(apiUrl+ '/omnicall/incoming_phone_numbers/' + phoneNumber + '/create_whatsapp_sender', {
           method: 'POST', // Changed from GET to POST since we're sending data
           headers: headers,
@@ -191,7 +191,7 @@
               console.log({ phone_number_id, waba_id });
               console.log('juhuu');
 
-              sendWhatsAppData(selectedPhoneNumber, waba_id);
+              sendWhatsAppData(phone_number_id, waba_id);
               console.log('sendWhatsAppData done');
               addRegisteredPair(selectedPhoneNumber, waba_id);
             } else {
