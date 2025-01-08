@@ -34,7 +34,7 @@
           .catch((error) => console.error(error));
       });
 
-      async function sendWhatsAppData(phoneNumber, wabaId) {
+      async function sendWhatsAppData(wabaId) {
       try {
         console.log('getGliaApi');
         const api = await window.getGliaApi({ version: "v1" });
@@ -46,8 +46,8 @@
 
         console.log('Starting to send to api');
 
-        const response = await fetch(apiUrl+ '/omnicall/incoming_phone_numbers/' + phoneNumber + '/create_whatsapp_sender', {
-          method: 'POST', // Changed from GET to POST since we're sending data
+        const response = await fetch(apiUrl+ '/omnicall/incoming_phone_numbers/' + selectedPhoneNumber + '/create_whatsapp_sender', {
+          method: 'POST', 
           headers: headers,
           body: JSON.stringify({            
             waba_id: wabaId
@@ -189,9 +189,11 @@
             if (data.event === "FINISH" || data.event === "FINISH_ONLY_WABA") {
               const { phone_number_id, waba_id } = data.data;
               console.log({ phone_number_id, waba_id });
+              console.log({ selectedPhoneNumber, waba_id });
+
               console.log('juhuu');
 
-              sendWhatsAppData(selectedPhoneNumber, waba_id);
+              sendWhatsAppData(waba_id);
               console.log('sendWhatsAppData done');
               addRegisteredPair(selectedPhoneNumber, waba_id);
             } else {
