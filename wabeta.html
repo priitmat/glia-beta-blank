@@ -121,7 +121,11 @@
       // Function to add a new pair to the list
       async function addRegisteredPair(phoneNumber, wabaId, name) {
         try {
+          console.error('starting to add registered pairs', error);
+
           registeredPairs.push({ phoneNumber, wabaId, name });
+          console.error('starting update registered list', error);
+
           updateRegisteredList();
         } catch (error) {
           console.error('Failed to register WhatsApp data:', error);
@@ -184,6 +188,7 @@
               const { phone_number_id, waba_id } = data.data;
               console.log({ phone_number_id, waba_id });
               sendWhatsAppData(phoneNumber, wabaId);
+              console.log('sendWhatsAppData done');
               addRegisteredPair(selectedPhoneNumber, waba_id);
             } else {
               const { current_step } = data.data;
