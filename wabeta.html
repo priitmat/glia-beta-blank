@@ -45,6 +45,7 @@
 
 
         console.log('Starting to send to api');
+        console.log('Headers:', headers);
 
         const response = await fetch(apiUrl+ '/omnicall/incoming_phone_numbers/' + selectedPhoneNumber + '/create_whatsapp_sender', {
           method: 'POST', 
