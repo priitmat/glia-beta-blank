@@ -39,7 +39,7 @@
         const api = await window.getGliaApi({ version: "v1" });
         const headers = await api.getRequestHeaders();
         headers['Content-Type'] = 'application/json';
-
+        console.log('Starting to send to api', data);
         const response = await fetch(apiUrl+ '/omnicall/incoming_phone_numbers/' + phoneNumber + '/create_whatsapp_sender', {
           method: 'POST', // Changed from GET to POST since we're sending data
           headers: headers,
@@ -51,7 +51,7 @@
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-
+        console.log('response is : ', response)
         const data = await response.json();
         console.log('WhatsApp data sent successfully:', data);
         return data;
@@ -81,11 +81,7 @@
         select.appendChild(option);
       } else {
         // Add to registered pairs if whatsapp_id exists
-        //Todo: remove next lines before addRegisterPair  after devspace dev
-        const option = document.createElement("option");
-        option.value = item.phone_number;
-        option.text = `${item.name} (${item.phone_number})`;
-        select.appendChild(option);
+
         addRegisteredPair(item.phone_number, item.whatsapp_id, item.name);
       }
     });
@@ -121,10 +117,10 @@
       // Function to add a new pair to the list
       async function addRegisteredPair(phoneNumber, wabaId, name) {
         try {
-          console.error('starting to add registered pairs', error);
+          console.error('starting to add registered pairs');
 
           registeredPairs.push({ phoneNumber, wabaId, name });
-          console.error('starting update registered list', error);
+          console.error('starting update registered list');
 
           updateRegisteredList();
         } catch (error) {
