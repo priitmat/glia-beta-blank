@@ -36,9 +36,14 @@
 
       async function sendWhatsAppData(phoneNumber, wabaId) {
       try {
+        console.log('getGliaApi');
         const api = await window.getGliaApi({ version: "v1" });
+        console.log('headers');
         const headers = await api.getRequestHeaders();
+        console.log('content type');
         headers['Content-Type'] = 'application/json';
+
+
         console.log('Starting to send to api', data);
         const response = await fetch(apiUrl+ '/omnicall/incoming_phone_numbers/' + phoneNumber + '/create_whatsapp_sender', {
           method: 'POST', // Changed from GET to POST since we're sending data
@@ -183,6 +188,8 @@
             if (data.event === "FINISH" || data.event === "FINISH_ONLY_WABA") {
               const { phone_number_id, waba_id } = data.data;
               console.log({ phone_number_id, waba_id });
+              console.log('juhuu');
+
               sendWhatsAppData(phoneNumber, wabaId);
               console.log('sendWhatsAppData done');
               addRegisteredPair(selectedPhoneNumber, waba_id);
