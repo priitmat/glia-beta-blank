@@ -1,151 +1,111 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+    <script
+      async
+      defer
+      crossorigin="anonymous"
+      src="https://connect.facebook.net/en_US/sdk.js"
+    ></script>
     <script type="text/javascript" src="//libs.glia.com/axon.js"></script>
     <script>
-      let globalJsonResponse;
-      let allNumbers;
       let selectedPhoneNumber = "";
       let displayName = "";
       let registeredPairs = [];
-      
+
       const apiUrl = "https://api.glia.com/";
       const getData = async (url, headers) => {
         const response = await fetch(url, { headers: headers });
         const jsonData = await response.json();
-        allNumbers = jsonData;
-        //TODO: This is commented out because I dont have verified numbers in Devspace - before beta comment in
-        // const filteredNumbers = jsonData.incoming_phone_numbers.filter(
-        //   (number) =>
-        //     number.compliance && number.compliance.status === "verified"
-        // );
         const filteredNumbers = jsonData.incoming_phone_numbers;
-        globalJsonResponse = filteredNumbers;
         populateDropdown(filteredNumbers);
         return filteredNumbers;
       };
 
       window.getGliaApi({ version: "v1" }).then(async (api) => {
         const headers = await api.getRequestHeaders();
-        getData(
-          apiUrl + `/omnicall/incoming_phone_numbers`,
-          headers
-        )
+        getData(apiUrl + `/omnicall/incoming_phone_numbers`, headers)
           .then((data) => console.info(data))
           .catch((error) => console.error(error));
       });
 
       async function sendWhatsAppData(wabaId) {
-      try {
-        console.log('getGliaApi');
-        const api = await window.getGliaApi({ version: "v1" });
-        console.log('headers');
-        const headers = await api.getRequestHeaders();
-        console.log('content type');
-        headers['Content-Type'] = 'application/json';
+        try {
+          const api = await window.getGliaApi({ version: "v1" });
+          const headers = await api.getRequestHeaders();
+          headers["Content-Type"] = "application/json";
 
+          const response = await fetch(
+            apiUrl +
+              "/omnicall/incoming_phone_numbers/" +
+              selectedPhoneNumber +
+              "/create_whatsapp_sender",
+            {
+              method: "POST",
+              headers: headers,
+              body: JSON.stringify({
+                whatsapp_id: wabaId,
+              }),
+            }
+          );
 
-        console.log('Starting to send to api');
-        console.log('Headers:', headers);
-
-        const response = await fetch(apiUrl+ '/omnicall/incoming_phone_numbers/' + selectedPhoneNumber + '/create_whatsapp_sender', {
-          method: 'POST', 
-          headers: headers,
-          body: JSON.stringify({            
-            whatsapp_id: wabaId
-          })
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          const data = await response.json();
+          console.log("WhatsApp data sent successfully:", data);
+          return data;
+        } catch (error) {
+          console.error("Error sending WhatsApp data:", error);
+          throw error;
         }
-        console.log('response is : ', response)
-        const data = await response.json();
-        console.log('WhatsApp data sent successfully:', data);
-        return data;
-      } catch (error) {
-        console.error('Error sending WhatsApp data:', error);
-        throw error;
       }
-    }
 
       function populateDropdown(data) {
-        // Create the select element
         const select = document.createElement("select");
         select.id = "phoneDropdown";
-
-        // Add a default option
         const defaultOption = document.createElement("option");
         defaultOption.text = "Select a phone number";
         defaultOption.value = "";
         select.appendChild(defaultOption);
         const phoneNameMap = new Map();
-
-        
-
-        // Loop through the incoming_phone_numbers array
         data.forEach((item) => {
-        if (!item.whatsapp_id) {
-          const option = document.createElement("option");
-          option.value = item.phone_number;
-          option.text = `${item.name} (${item.phone_number})`;
-          select.appendChild(option);
+          if (!item.whatsapp_id) {
+            const option = document.createElement("option");
+            option.value = item.phone_number;
+            option.text = `${item.name} (${item.phone_number})`;
+            select.appendChild(option);
 
-          phoneNameMap.set(item.phone_number, item.name);
-
-        } else {
-          // Add to registered pairs if whatsapp_id exists
-          addRegisteredPair(item.phone_number, item.whatsapp_id, item.name);
-        }
-      });
-
-        // Add the select element to the DOM
+            phoneNameMap.set(item.phone_number, item.name);
+          } else {
+            addRegisteredPair(item.phone_number, item.whatsapp_id, item.name);
+          }
+        });
         const container = document.getElementById("dropdownContainer");
         container.appendChild(select);
-
-        // Add event listener to the dropdown
         select.addEventListener("change", function () {
           const fbButton = document.getElementById("fbLoginButton");
           if (this.value) {
             fbButton.style.display = "inline-block";
-            selectedPhoneNumber = this.value; // Update the selected phone number
+            selectedPhoneNumber = this.value;
             displayName = phoneNameMap.get(selectedPhoneNumber);
           } else {
             fbButton.style.display = "none";
-            selectedPhoneNumber = ""; // Clear the selected phone number
-            displayName = ""; // Clear the global displayName
+            selectedPhoneNumber = "";
+            displayName = "";
           }
         });
       }
 
-      function simulateEmbeddedSignup(event, data) {
-        window.postMessage(
-          JSON.stringify({
-            type: "WA_EMBEDDED_SIGNUP",
-            event: event,
-            data: data,
-          }),
-          "https://okta.app.beta.glia.com"
-        );
-      }
-
-      // Function to add a new pair to the list
       async function addRegisteredPair(phoneNumber, wabaId, name) {
         try {
-          console.error('starting to add registered pairs');
-
           registeredPairs.push({ phoneNumber, wabaId, name });
-          console.error('starting update registered list');
-
           updateRegisteredList();
         } catch (error) {
-          console.error('Failed to register WhatsApp data:', error);
-          // TODO:, you can show an error message to the user here
+          console.error("Failed to register WhatsApp data:", error);
         }
       }
 
-      // Function to update the displayed list
       function updateRegisteredList() {
         const list = document.getElementById("registeredNumbersList");
         list.innerHTML = "";
@@ -156,9 +116,6 @@
         });
       }
 
-      
-
-      //Read idtoken from query parameter with the same name.
       const params = new Proxy(new URLSearchParams(window.location.search), {
         get: (searchParams, prop) => searchParams.get(prop),
       });
@@ -166,45 +123,29 @@
       window.getGliaContext = () => ({ idToken });
 
       function launchEmbeddedSignup() {
-        console.log("login started");
-
-        // Launch Facebook login
-        FB.login(
-          function (response) {
-            // Since you are using Twilio's APIs, you do not need to do anything with the response here.
-          },
-          {
-            config_id: "3639230559663523",
-            auth_type: "rerequest",
-            response_type: "code",
-            override_default_response_type: true,
-            extras: {
-              sessionInfoVersion: 2,
-              featureType: "only_waba_sharing",
-              setup: {
-                solutionID: "8927018910681547",
-              }
+        FB.login(function (response) {}, {
+          config_id: "3639230559663523",
+          auth_type: "rerequest",
+          response_type: "code",
+          override_default_response_type: true,
+          extras: {
+            sessionInfoVersion: 2,
+            featureType: "only_waba_sharing",
+            setup: {
+              solutionID: "8927018910681547",
             },
-          }
-        );
+          },
+        });
       }
 
-      // Define session handler
       const embeddedSignupInfoListener = (event) => {
-        console.log("embeddedSignupInfoListener event recieved");
         if (!event.origin.endsWith("facebook.com")) return;
         try {
           const data = JSON.parse(event.data);
           if (data.type === "WA_EMBEDDED_SIGNUP") {
             if (data.event === "FINISH" || data.event === "FINISH_ONLY_WABA") {
               const { phone_number_id, waba_id } = data.data;
-              console.log({ phone_number_id, waba_id });
-              console.log({ selectedPhoneNumber, waba_id });
-
-              console.log('juhuu');
-
               sendWhatsAppData(waba_id);
-              console.log('sendWhatsAppData done');
               addRegisteredPair(selectedPhoneNumber, waba_id);
             } else {
               const { current_step } = data.data;
@@ -218,10 +159,7 @@
         }
       };
 
-      // Listen for Embedded Signup events
       window.addEventListener("message", embeddedSignupInfoListener);
-
-      // When the user navigates away from the page, remove the event listener
       window.addEventListener("beforeunload", () =>
         window.removeEventListener("message", embeddedSignupInfoListener)
       );
@@ -797,13 +735,14 @@
     </style>
   </head>
   <body>
-    <script>      
-    window.fbAsyncInit = function () {
-      FB.init({
-        appId: "1562326167693788", // Your Meta app ID
-        version: "v20.0", // Meta Graph API version
-      });
-    };</script>
+    <script>
+      window.fbAsyncInit = function () {
+        FB.init({
+          appId: "1562326167693788", // Your Meta app ID
+          version: "v20.0", // Meta Graph API version
+        });
+      };
+    </script>
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap");
       .glia-hub {
@@ -851,13 +790,20 @@
     <div class="glia-hub">
       <h1>Register for WhatsApp</h1>
       <p>
-        1. From the dropdown menu, select the phone number you wish to associate with your WhatsApp Business account.
+        1. From the dropdown menu, select the phone number you wish to associate
+        with your WhatsApp Business account.
       </p>
-        2. Click the "Login with Facebook" button to initiate the authentication process.
-        <p>
-        3. Upon clicking the "Login with Facebook" button, you will be redirected to Facebook's secure login page. After successfully authenticating your credentials, you will be prompted to grant Glia permission to access your WhatsApp Business account. This step is crucial as it enables Glia to securely retrieve your WhatsApp Business API credentials.
-        
-        Once you have completed the authentication and authorization process, you will be automatically redirected back to the Glia Hub platform
+      2. Click the "Login with Facebook" button to initiate the authentication
+      process.
+      <p>
+        3. Upon clicking the "Login with Facebook" button, you will be
+        redirected to Facebook's secure login page. After successfully
+        authenticating your credentials, you will be prompted to grant Glia
+        permission to access your WhatsApp Business account. This step is
+        crucial as it enables Glia to securely retrieve your WhatsApp Business
+        API credentials. Once you have completed the authentication and
+        authorization process, you will be automatically redirected back to the
+        Glia Hub platform
       </p>
       <div id="dropdownContainer"></div>
       <button id="fbLoginButton">Login with Facebook</button>
