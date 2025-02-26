@@ -1,12 +1,6 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <script
-      async
-      defer
-      crossorigin="anonymous"
-      src="https://connect.facebook.net/en_US/sdk.js"
-    ></script>
     <script type="text/javascript" src="//libs.glia.com/axon.js"></script>
     <script>
       let selectedPhoneNumber = "";
@@ -122,16 +116,9 @@
       window.getGliaContext = () => ({ idToken });
       
       //Meta
-      window.fbAsyncInit = function () {
-        FB.init({
-          appId: "1562326167693788", // Your Meta app ID
-          autoLogAppEvents: true,
-          xfbml: true,
-          version: "v21.0",
-        });
-      };
 
       function launchEmbeddedSignup() {
+        console.log('FB Login');
         FB.login(function (response) {}, {
           config_id: "3639230559663523",
           auth_type: "rerequest",
@@ -149,6 +136,7 @@
 
       // Define session handler
       const embeddedSignupInfoListener = (event) => {
+        console.log('embedded');
         if (!event.origin.endsWith("facebook.com")) return;
         try {
           const data = JSON.parse(event.data);
@@ -187,7 +175,6 @@
       window.addEventListener("beforeunload", () =>
         window.removeEventListener("message", embeddedSignupInfoListener)
       );
-
     </script>
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap");
@@ -283,6 +270,18 @@
     </style>
   </head>
   <body>
+    <script>
+      window.fbAsyncInit = function () {
+        console.log('FB loaded');
+        FB.init({
+          appId: "1562326167693788", // Your Meta app ID
+          autoLogAppEvents: true,
+          xfbml: true,
+          version: "v21.0",
+        });
+      };
+    </script>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
     <div class="glia-hub">
       <h1>Register for WhatsApp</h1>
       <p>
