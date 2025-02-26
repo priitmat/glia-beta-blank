@@ -13,8 +13,6 @@
       let displayName = "";
       let registeredPairs = [];
 
-
-
       const apiUrl = "https://api.beta.glia.com/";
       const getData = async (url, headers) => {
         const response = await fetch(url, { headers: headers });
@@ -77,7 +75,6 @@
             option.value = item.phone_number;
             option.text = `${item.name} (${item.phone_number})`;
             select.appendChild(option);
-
             phoneNameMap.set(item.phone_number, item.name);
           } else {
             addRegisteredPair(item.phone_number, item.whatsapp_id, item.name);
@@ -291,10 +288,6 @@
     </style>
   </head>
   <body>
-    <script>
-
-    </script>
-
     <div class="glia-hub">
       <h1>Register for WhatsApp</h1>
       <p>
@@ -318,6 +311,7 @@
         id="fbLoginButton"
         onclick="launchEmbeddedSignup()"
         style="
+          display: none;
           background-color: #1877f2;
           border: 0;
           border-radius: 4px;
@@ -332,7 +326,6 @@
       >
         Login with Facebook
       </button>
-      <!-- <button id="fbLoginButton">Login with Facebook</button> -->
       <div id="registeredNumbersContainer">
         <h2>Registered Numbers and WABA IDs</h2>
         <ul id="registeredNumbersList"></ul>
