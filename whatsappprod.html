@@ -117,64 +117,7 @@
       
       //Meta
 
-      function launchEmbeddedSignup() {
-        console.log('FB Login');
-        FB.login(function (response) {}, {
-          config_id: "3639230559663523",
-          auth_type: "rerequest",
-          response_type: "code",
-          override_default_response_type: true,
-          extras: {
-            sessionInfoVersion: 3,
-            featureType: "only_waba_sharing",
-            setup: {
-              solutionID: "8927018910681547",
-            },
-          },
-        });
-      }
-
-      // Define session handler
-      const embeddedSignupInfoListener = (event) => {
-        console.log('embedded');
-        if (!event.origin.endsWith("facebook.com")) return;
-        try {
-          const data = JSON.parse(event.data);
-          if (data.type === "WA_EMBEDDED_SIGNUP") {
-            // if user finishes the Embedded Signup flow
-            if (data.event === "FINISH" || data.event === "FINISH_ONLY_WABA") {
-              const { phone_number_id, waba_id } = data.data;
-              console.log(
-                "Phone number ID ",
-                phone_number_id,
-                " WhatsApp business account ID ",
-                waba_id
-              );
-              sendWhatsAppData(waba_id);
-              addRegisteredPair(selectedPhoneNumber, waba_id);
-              // if user cancels the Embedded Signup flow
-            } else if (data.event === "CANCEL") {
-              const { current_step } = data.data;
-              console.warn("Cancel at ", current_step);
-
-              // if user reports an error during the Embedded Signup flow
-            } else if (data.event === "ERROR") {
-              const { error_message } = data.data;
-              console.error("error ", error_message);
-            }
-          }
-        } catch {
-          console.log("Non JSON Responses", event.data);
-        }
-      };
-
-      // Listen for Embedded Signup events
-      window.addEventListener("message", embeddedSignupInfoListener);
-
-      // When the user navigates away from the page, remove the event listener
-      window.addEventListener("beforeunload", () =>
-        window.removeEventListener("message", embeddedSignupInfoListener)
-      );
+      
     </script>
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap");
@@ -280,6 +223,65 @@
           version: "v21.0",
         });
       };
+
+      function launchEmbeddedSignup() {
+        console.log('FB Login');
+        FB.login(function (response) {}, {
+          config_id: "3639230559663523",
+          auth_type: "rerequest",
+          response_type: "code",
+          override_default_response_type: true,
+          extras: {
+            sessionInfoVersion: 3,
+            featureType: "only_waba_sharing",
+            setup: {
+              solutionID: "8927018910681547",
+            },
+          },
+        });
+      }
+
+      // Define session handler
+      const embeddedSignupInfoListener = (event) => {
+        console.log('embedded');
+        if (!event.origin.endsWith("facebook.com")) return;
+        try {
+          const data = JSON.parse(event.data);
+          if (data.type === "WA_EMBEDDED_SIGNUP") {
+            // if user finishes the Embedded Signup flow
+            if (data.event === "FINISH" || data.event === "FINISH_ONLY_WABA") {
+              const { phone_number_id, waba_id } = data.data;
+              console.log(
+                "Phone number ID ",
+                phone_number_id,
+                " WhatsApp business account ID ",
+                waba_id
+              );
+              sendWhatsAppData(waba_id);
+              addRegisteredPair(selectedPhoneNumber, waba_id);
+              // if user cancels the Embedded Signup flow
+            } else if (data.event === "CANCEL") {
+              const { current_step } = data.data;
+              console.warn("Cancel at ", current_step);
+
+              // if user reports an error during the Embedded Signup flow
+            } else if (data.event === "ERROR") {
+              const { error_message } = data.data;
+              console.error("error ", error_message);
+            }
+          }
+        } catch {
+          console.log("Non JSON Responses", event.data);
+        }
+      };
+
+      // Listen for Embedded Signup events
+      window.addEventListener("message", embeddedSignupInfoListener);
+
+      // When the user navigates away from the page, remove the event listener
+      window.addEventListener("beforeunload", () =>
+        window.removeEventListener("message", embeddedSignupInfoListener)
+      );
     </script>
     <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
     <div class="glia-hub">
